@@ -5,7 +5,14 @@
 set -euo pipefail
 
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-LLAMA_SERVER="$PROJECT_DIR/llama.cpp/llama-server"
+# Check both possible binary locations
+if [ -f "$PROJECT_DIR/llama.cpp/build/bin/llama-server" ]; then
+    LLAMA_SERVER="$PROJECT_DIR/llama.cpp/build/bin/llama-server"
+elif [ -f "$PROJECT_DIR/llama.cpp/llama-server" ]; then
+    LLAMA_SERVER="$PROJECT_DIR/llama.cpp/llama-server"
+else
+    LLAMA_SERVER="$PROJECT_DIR/llama.cpp/build/bin/llama-server"
+fi
 MODEL_PATH="$PROJECT_DIR/models/llama-3.2-1b-instruct-q4_k_m.gguf"
 
 # Server configuration

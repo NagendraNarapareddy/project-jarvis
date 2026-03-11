@@ -25,7 +25,10 @@ with open(CONFIG_PATH) as f:
 if sys.platform == "win32":
     LLAMA_SERVER = PROJECT_DIR / "llama.cpp" / "llama-server.exe"
 else:
-    LLAMA_SERVER = PROJECT_DIR / "llama.cpp" / "llama-server"
+    # cmake build puts binary in build/bin/
+    LLAMA_SERVER = PROJECT_DIR / "llama.cpp" / "build" / "bin" / "llama-server"
+    if not LLAMA_SERVER.exists():
+        LLAMA_SERVER = PROJECT_DIR / "llama.cpp" / "llama-server"
 
 MODEL_PATH = PROJECT_DIR / config["llm"]["model_path"]
 LLM_HOST = config["llm"].get("host", "127.0.0.1")

@@ -21,22 +21,24 @@ pkg update -y && pkg upgrade -y
 pkg install -y \
     python git clang cmake make \
     ffmpeg termux-api portaudio \
-    wget pulseaudio
+    wget pulseaudio \
+    python-numpy build-essential
 
 # ── Step 2: Python packages ─────────────────
 echo "[2/7] Installing Python packages..."
 pip install --break-system-packages \
-    pyaudio requests pyyaml aiohttp numpy
+    pyaudio requests pyyaml aiohttp
 
 # ── Step 3: Compile llama.cpp ────────────────
 echo "[3/7] Setting up llama.cpp..."
-if [ ! -f "$PROJECT_DIR/llama.cpp/llama-server" ]; then
+if [ ! -f "$PROJECT_DIR/llama.cpp/build/bin/llama-server" ]; then
     if [ ! -d "$PROJECT_DIR/llama.cpp" ]; then
         cd "$PROJECT_DIR"
         git clone --depth 1 https://github.com/ggml-org/llama.cpp.git
     fi
     cd "$PROJECT_DIR/llama.cpp"
-    make LLAMA_ANDROID=1 -j4
+    cmake -B build -DLLAMA_ANDROID=ON -DBUILD_SHARED_LIBS=OFF
+    cmake --build build --config Release -j4
     echo "[OK] llama.cpp compiled."
 else
     echo "[OK] llama.cpp already compiled."
@@ -44,13 +46,14 @@ fi
 
 # ── Step 4: Compile whisper.cpp ──────────────
 echo "[4/7] Setting up whisper.cpp..."
-if [ ! -f "$PROJECT_DIR/whisper.cpp/main" ]; then
+if [ ! -f "$PROJECT_DIR/whisper.cpp/build/bin/whisper-cli" ]; then
     if [ ! -d "$PROJECT_DIR/whisper.cpp" ]; then
         cd "$PROJECT_DIR"
         git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git
     fi
     cd "$PROJECT_DIR/whisper.cpp"
-    make -j4
+    cmake -B build -DBUILD_SHARED_LIBS=OFF
+    cmake --build build --config Release -j4
     echo "[OK] whisper.cpp compiled."
 else
     echo "[OK] whisper.cpp already compiled."

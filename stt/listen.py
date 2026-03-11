@@ -38,7 +38,10 @@ if sys.platform == "win32":
     if not WHISPER_BINARY.exists():
         WHISPER_BINARY = PROJECT_DIR / "whisper.cpp" / "main.exe"
 else:
-    WHISPER_BINARY = PROJECT_DIR / "whisper.cpp" / "main"
+    # cmake build puts binary in build/bin/
+    WHISPER_BINARY = PROJECT_DIR / "whisper.cpp" / "build" / "bin" / "whisper-cli"
+    if not WHISPER_BINARY.exists():
+        WHISPER_BINARY = PROJECT_DIR / "whisper.cpp" / "main"
 
 
 def _rms(data: bytes) -> float:
