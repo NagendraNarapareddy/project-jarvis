@@ -37,8 +37,13 @@ if [ ! -f "$PROJECT_DIR/llama.cpp/build/bin/llama-server" ]; then
         git clone --depth 1 https://github.com/ggml-org/llama.cpp.git
     fi
     cd "$PROJECT_DIR/llama.cpp"
-    cmake -B build -DLLAMA_ANDROID=ON -DBUILD_SHARED_LIBS=OFF
-    cmake --build build --config Release -j4
+    cmake -B build \
+        -DLLAMA_ANDROID=ON \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DLLAMA_BUILD_TESTS=OFF \
+        -DLLAMA_BUILD_EXAMPLES=OFF \
+        -DLLAMA_BUILD_SERVER=ON
+    cmake --build build --config Release --target llama-server -j4
     echo "[OK] llama.cpp compiled."
 else
     echo "[OK] llama.cpp already compiled."
@@ -52,8 +57,11 @@ if [ ! -f "$PROJECT_DIR/whisper.cpp/build/bin/whisper-cli" ]; then
         git clone --depth 1 https://github.com/ggerganov/whisper.cpp.git
     fi
     cd "$PROJECT_DIR/whisper.cpp"
-    cmake -B build -DBUILD_SHARED_LIBS=OFF
-    cmake --build build --config Release -j4
+    cmake -B build \
+        -DBUILD_SHARED_LIBS=OFF \
+        -DWHISPER_BUILD_TESTS=OFF \
+        -DWHISPER_BUILD_EXAMPLES=OFF
+    cmake --build build --config Release --target whisper-cli -j4
     echo "[OK] whisper.cpp compiled."
 else
     echo "[OK] whisper.cpp already compiled."
