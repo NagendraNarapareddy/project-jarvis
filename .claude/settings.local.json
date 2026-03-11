@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)",
+      "Bash(gh api:*)",
+      "WebSearch",
+      "WebFetch(domain:sourceforge.net)",
+      "Bash(git rm:*)",
+      "Bash(rm -rf .git)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\HP\\OneDrive\\Desktop\\project-jarvis\\.git"
+    ]
+  }
+}

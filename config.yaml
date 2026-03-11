@@ -1,0 +1,46 @@
+# JARVIS Configuration
+# ====================
+
+jarvis:
+  name: "JARVIS"
+  log_file: "jarvis.log"
+  wake_word: "hey jarvis"
+
+llm:
+  host: "127.0.0.1"
+  port: 8080
+  model_path: "models/llama-3.2-1b-instruct-q4_k_m.gguf"
+  context_size: 2048
+  threads: 4
+  max_tokens: 256
+  temperature: 0.7
+  system_prompt: >
+    You are JARVIS, a fast on-device AI assistant running on
+    Android. Keep all replies under 3 sentences. Be concise,
+    direct, and helpful. Never mention that you are an AI.
+
+stt:
+  model_path: "models/ggml-tiny.en.bin"
+  language: "en"
+  sample_rate: 16000
+  silence_threshold: 500
+  max_record_seconds: 10
+
+tts:
+  piper_binary: "models/piper"
+  voice_model: "models/en_US-lessac-medium.onnx"
+  voice_config: "models/en_US-lessac-medium.onnx.json"
+  sample_rate: 22050
+
+integrations:
+  poll_interval: 3
+  rate_limit_seconds: 30
+  reply_log: "replies.log"
+  whatsapp:
+    enabled: true
+    whitelist: []
+    blacklist: []
+  instagram:
+    enabled: true
+    whitelist: []
+    blacklist: []
