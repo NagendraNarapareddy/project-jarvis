@@ -38,12 +38,17 @@ if [ ! -f "$PROJECT_DIR/llama.cpp/build/bin/llama-server" ]; then
     fi
     cd "$PROJECT_DIR/llama.cpp"
     cmake -B build \
-        -DLLAMA_ANDROID=ON \
+        -DGGML_ANDROID=ON \
         -DBUILD_SHARED_LIBS=OFF \
-        -DLLAMA_BUILD_TESTS=OFF \
-        -DLLAMA_BUILD_EXAMPLES=OFF \
-        -DLLAMA_BUILD_SERVER=ON
-    cmake --build build --config Release --target llama-server -j4
+        -DLLAMA_BUILD_TESTS=OFF
+    cmake --build build --config Release -j4 || true
+    # Verify the binary was built
+    if [ ! -f "$PROJECT_DIR/llama.cpp/build/bin/llama-server" ]; then
+        echo "[ERROR] llama-server binary not found after build."
+        echo "  Listing what was built:"
+        ls build/bin/ 2>/dev/null || echo "  build/bin/ does not exist"
+        exit 1
+    fi
     echo "[OK] llama.cpp compiled."
 else
     echo "[OK] llama.cpp already compiled."
@@ -59,9 +64,15 @@ if [ ! -f "$PROJECT_DIR/whisper.cpp/build/bin/whisper-cli" ]; then
     cd "$PROJECT_DIR/whisper.cpp"
     cmake -B build \
         -DBUILD_SHARED_LIBS=OFF \
-        -DWHISPER_BUILD_TESTS=OFF \
-        -DWHISPER_BUILD_EXAMPLES=OFF
-    cmake --build build --config Release --target whisper-cli -j4
+        -DWHISPER_BUILD_TESTS=OFF
+    cmake --build build --config Release -j4 || true
+    # Verify the binary was built
+    if [ ! -f "$PROJECT_DIR/whisper.cpp/build/bin/whisper-cli" ]; then
+        echo "[ERROR] whisper-cli binary not found after build."
+        echo "  Listing what was built:"
+        ls build/bin/ 2>/dev/null || echo "  build/bin/ does not exist"
+        exit 1
+    fi
     echo "[OK] whisper.cpp compiled."
 else
     echo "[OK] whisper.cpp already compiled."
